@@ -1,0 +1,62 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.eggs/
+*.egg-info/
+.eggs-info/
+
+# --- Virtual environments ---
+venv/
+env/
+.venv/
+ENV/
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Data (large / generated, not source) ---
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/versions/*
+!data/versions/.gitkeep
+
+# --- Models (generated artifacts, not source) ---
+models/*
+!models/.gitkeep
+
+# --- Logs ---
+*.log
+logs/
+runtime_logs/*.log
+
+# --- Testing / coverage ---
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# --- IDE / editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Docker ---
+*.pid
+
+# --- Jupyter (in case of exploratory notebooks) ---
+.ipynb_checkpoints/
+
+# --- MLflow (if used locally) ---
+mlruns/
