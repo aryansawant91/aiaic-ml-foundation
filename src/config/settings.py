@@ -31,12 +31,14 @@ class Settings(BaseSettings):
     # --- Agmarknet (data.gov.in) source ---
     # Public resource id for the "Variety-wise Daily Market Prices" dataset
     # on data.gov.in. An API key is required (free registration).
-    agmarknet_resource_id: str = "9ef84268-d588-465a-a308-a864a43d0070"
-    agmarknet_base_url: str = "https://api.data.gov.in/resource"
-    agmarknet_api_key: str = Field(default="", description="Set via DATA_GOV_IN_API_KEY env var")
+    # agmarknet_resource_id: str = "9ef84268-d588-465a-a308-a864a43d0070"
+    # agmarknet_base_url: str = "https://api.data.gov.in/resource"
+    # agmarknet_api_key: str = Field(default="", description="Set via DATA_GOV_IN_API_KEY env var")
+
+    
 
     # --- Fallback dataset (used if Agmarknet fetch fails / no API key) ---
-    fallback_csv_name: str = "indian_agriculture_crop_price_dataset.csv"
+    fallback_csv_name: str = "Agriculture_price_dataset.csv"
 
     # --- Determinism ---
     random_seed: int = 42

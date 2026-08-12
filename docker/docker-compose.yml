@@ -1,0 +1,52 @@
+# AIAIC ML Foundation - local deployment (API + MongoDB)
+#
+# Usage:
+#   docker compose -f docker/docker-compose.yml up --build
+#
+# The service is self-contained: if MongoDB isn't reachable, the API
+# still starts and runs in a degraded-but-functional mode (dataset
+# versioning and training-run logs fall back to local JSON files —
+# see src/storage/mongo_client.py).
+
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: aiaic_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: aiaic_ml_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - AIAIC_MONGO_URI=mongodb://mongo:27017
+      - AIAIC_LOG_LEVEL=INFO
+    env_file:
+      - ../.env
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      # Mount data/ and models/ from host so training runs on the host
+      # (or via `docker compose exec api python -m ...`) are visible
+      # to the API without rebuilding the image every time.
+      - ../data:/app/data
+      - ../models:/app/models
+
+volumes:
+  mongo_data:
