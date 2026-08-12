@@ -76,6 +76,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_prefix = "AIAIC_"
+        protected_namespaces = ()
 
     def ensure_dirs(self) -> None:
         for d in [self.raw_data_dir, self.processed_data_dir, self.versions_dir, self.models_dir]:
