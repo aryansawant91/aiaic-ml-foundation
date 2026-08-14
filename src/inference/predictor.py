@@ -17,7 +17,7 @@ from src.training.persistence import load_latest_model
 
 logger = logging.getLogger(__name__)
 
-CATEGORICAL_COLUMNS = ["commodity", "state", "season"]
+CATEGORICAL_COLUMNS = ["commodity", "state", "season", "grade"]
 
 
 class PredictionError(Exception):
@@ -43,14 +43,14 @@ def reload_model() -> Dict[str, Any]:
     return metadata
 
 
+CATEGORICAL_COLUMNS = ["commodity", "state", "season", "grade"]
+
+
 def _build_feature_row(payload: Dict[str, Any], feature_columns: List[str]) -> pd.DataFrame:
     """
     Builds a single-row dataframe matching the exact feature_columns
-    the model was trained on. Missing columns are filled with None,
-    which LightGBM/XGBoost handle natively as missing values — but we
-    log a warning since a missing lag/rolling feature usually means
-    the caller didn't supply recent price history, which will hurt
-    prediction quality even if it doesn't crash.
+    the model was trained on. All object/string columns are cast to
+    category dtype to match training-time dtype expectations in LightGBM.
     """
     row = {}
     missing = []
@@ -65,12 +65,19 @@ def _build_feature_row(payload: Dict[str, Any], feature_columns: List[str]) -> p
         logger.warning("Prediction request missing features (set to null): %s", missing)
 
     df = pd.DataFrame([row])
+
+    # Cast all known categoricals
     for col in CATEGORICAL_COLUMNS:
         if col in df.columns:
             df[col] = df[col].astype("category")
 
-    return df
+    # Safety net: cast any remaining object columns to category
+    # (mirrors the same safety net in train.py _prepare_features)
+    for col in df.columns:
+        if df[col].dtype == object:
+            df[col] = df[col].astype("category")
 
+    return df
 
 def predict_price(payload: Dict[str, Any]) -> Dict[str, Any]:
     """
