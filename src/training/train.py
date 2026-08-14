@@ -23,19 +23,27 @@ from src.training.run_registry import log_training_run
 
 logger = logging.getLogger(__name__)
 
-CATEGORICAL_COLUMNS = ["commodity", "state", "season"]
+CATEGORICAL_COLUMNS = ["commodity", "state", "season", "grade"]
 DROP_COLUMNS = ["date", "modal_price", "district", "market", "variety", "_source_file"]
 
 
 def _prepare_features(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series, list]:
     """
-    Encodes categoricals (pandas category dtype, which both LightGBM
-    and XGBoost can consume natively) and returns (X, y, feature_columns).
+    Encodes categoricals as pandas category dtype and drops non-feature
+    columns. Any object-type column NOT in CATEGORICAL_COLUMNS is also
+    cast to category to prevent LightGBM dtype errors.
     """
     working = df.copy()
 
+    # Cast all known categoricals
     for col in CATEGORICAL_COLUMNS:
         if col in working.columns:
+            working[col] = working[col].astype("category")
+
+    # Safety net: cast ANY remaining object columns to category
+    # so LightGBM never sees a raw object dtype
+    for col in working.columns:
+        if working[col].dtype == object:
             working[col] = working[col].astype("category")
 
     feature_columns = [
@@ -46,7 +54,6 @@ def _prepare_features(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series, list]:
     X = working[feature_columns]
     y = working["modal_price"]
     return X, y, feature_columns
-
 
 def _time_based_split(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
