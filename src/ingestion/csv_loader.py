@@ -13,40 +13,44 @@ from src.config.settings import settings
 logger = logging.getLogger(__name__)
 
 COLUMN_ALIASES = {
-    # State variants
+    # State
     "State": "state", "STATE": "state", "state_name": "state",
 
-    # District variants
+    # District
     "District Name": "district", "district_name": "district",
     "District": "district", "DISTRICT": "district",
 
-    # Market variants
+    # Market
     "Market Name": "market", "market_name": "market",
     "Market": "market", "MARKET": "market",
 
-    # Commodity variants
+    # Commodity
     "Commodity": "commodity", "COMMODITY": "commodity",
     "commodity_name": "commodity", "Commodity Name": "commodity",
 
-    # Variety variants
+    # Variety
     "Variety": "variety", "VARIETY": "variety",
 
-    # Date variants
+    # Grade
+    "Grade": "grade", "GRADE": "grade",
+
+    # Date — ALL known variants
     "Arrival_Date": "date", "arrival_date": "date",
-    "Price Date": "date", "DATE": "date", "Date": "date",
+    "Price Date": "date",        # <-- this was missing
+    "DATE": "date", "Date": "date",
 
-    # Price variants — normal
-    "Min_Price": "min_price", "MIN_PRICE": "min_price",
-    "Max_Price": "max_price", "MAX_PRICE": "max_price",
-    "Modal_Price": "modal_price", "MODAL_PRICE": "modal_price",
+    # Price — underscore variants (actual column names in this CSV)
+    "Min_Price": "min_price",    # <-- these were missing
+    "Max_Price": "max_price",
+    "Modal_Price": "modal_price",
 
-    # Price variants — URL-encoded spaces (x0020 = space in some exports)
+    # Price — space-encoded variants from second CSV
     "Min_x0020_Price": "min_price",
     "Max_x0020_Price": "max_price",
     "Modal_x0020_Price": "modal_price",
 
-    # Grade (not in schema but keep it, don't break on it)
-    "Grade": "grade", "GRADE": "grade",
+    # Price — other casing
+    "MIN_PRICE": "min_price", "MAX_PRICE": "max_price", "MODAL_PRICE": "modal_price",
 }
 
 # After aliasing, if BOTH an original and alias column exist (e.g.

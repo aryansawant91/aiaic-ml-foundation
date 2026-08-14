@@ -54,7 +54,10 @@ def validate_dataset(df: pd.DataFrame, parent_hash: str) -> Tuple[pd.DataFrame, 
 
     # 3. Date column must parse
     if "date" in working.columns:
-        parsed_dates = pd.to_datetime(working["date"], errors="coerce", dayfirst=True)
+        parsed_dates = pd.to_datetime(working["date"], errors="coerce", dayfirst=False)
+        if parsed_dates.isna().mean() > 0.5:
+            # Try dayfirst if more than half failed
+            parsed_dates = pd.to_datetime(working["date"], errors="coerce", dayfirst=True)
         bad_date_mask = parsed_dates.isna()
         working.loc[bad_date_mask & (working["_quarantine_reason"] == ""), "_quarantine_reason"] = (
             "unparseable_date"
