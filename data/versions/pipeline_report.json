@@ -1,0 +1,76 @@
+{
+  "ingestion": {
+    "rows": 740125,
+    "columns": [
+      "state",
+      "district",
+      "market",
+      "commodity",
+      "variety",
+      "grade",
+      "min_price",
+      "max_price",
+      "modal_price",
+      "date",
+      "_source_file"
+    ],
+    "source": "local_raw_csvs",
+    "hash": "649c02fb2d7e",
+    "duration_sec": 8.12
+  },
+  "validation": {
+    "clean_rows": 737389,
+    "quarantined_rows": 2736,
+    "quarantine_reasons": {
+      "unparseable_date": 2733,
+      "price_out_of_valid_range": 3
+    },
+    "hash": "84322ce525d7",
+    "duration_sec": 3.36
+  },
+  "preprocessing": {
+    "rows": 737389,
+    "hash": "971f9394762c",
+    "duration_sec": 7.47
+  },
+  "features": {
+    "rows": 735774,
+    "feature_columns_added": [
+      "month",
+      "day_of_week",
+      "is_weekend",
+      "season",
+      "month_sin",
+      "month_cos",
+      "modal_price_lag_1",
+      "modal_price_lag_7",
+      "modal_price_lag_14",
+      "modal_price_roll_mean_7",
+      "modal_price_roll_std_7",
+      "modal_price_roll_mean_14",
+      "modal_price_roll_std_14",
+      "modal_price_roll_mean_30",
+      "modal_price_roll_std_30"
+    ],
+    "hash": "78d16a7e9a21",
+    "duration_sec": 21.31
+  },
+  "training": {
+    "model_file": "C:\\Users\\Tushar\\Downloads\\aiaic-ml\\aiaic-ml-foundation\\models\\price_predictor_20260814T022521Z_78d16a7e.joblib",
+    "metrics": {
+      "mae": 44.0656,
+      "rmse": 91.6882,
+      "mape_pct": 4.5197,
+      "r2": 0.9946
+    },
+    "baseline_metrics": {
+      "mae": 435.4616,
+      "rmse": 758.2338,
+      "mape_pct": 26.0242,
+      "r2": 0.6316
+    },
+    "beats_baseline": true,
+    "duration_sec": 14.66
+  },
+  "total_duration_sec": 54.94
+}
