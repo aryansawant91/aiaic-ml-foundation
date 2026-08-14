@@ -22,6 +22,7 @@ class PredictionRequest(BaseModel):
     season: Optional[str] = Field(default=None, examples=["kharif", "rabi", "zaid"])
     month_sin: Optional[float] = None
     month_cos: Optional[float] = None
+    grade: Optional[str] = Field(default="FAQ", examples=["FAQ", "Local"])
 
     # Recent price history — caller supplies these if known; the more
     # of these that are present, the better the prediction quality.

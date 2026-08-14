@@ -60,3 +60,11 @@ Thumbs.db
 
 # --- MLflow (if used locally) ---
 mlruns/
+
+# Allow model metadata JSON but not large binary model files
+!models/*.json
+models/*.joblib
+
+# Allow pipeline report
+!data/versions/pipeline_report.json
+!data/versions/training_runs/
